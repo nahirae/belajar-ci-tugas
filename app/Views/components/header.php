@@ -16,6 +16,13 @@
   </form>
 </div><!-- End Search Bar -->
 
+<?php if (session()->has('diskon_nominal')) : ?>
+  <div class="nav-link badge bg-success text-white rounded-lg px-3 py-2 ms-2 d-none d-lg-inline-block" style="pointer-events: none;">
+    Hari ini ada diskon <?= number_format(session()->get('diskon_nominal'), 0, ',', '.') ?> per item
+  </div>
+<?php endif; ?>
+
+
 <nav class="header-nav ms-auto">
   <ul class="d-flex align-items-center">
 

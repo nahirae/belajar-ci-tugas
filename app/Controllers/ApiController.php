@@ -56,6 +56,28 @@ class ApiController extends ResourceController
             }
         } 
 
+        $transactions = $this->transaction->orderBy('created_at', 'DESC')->findAll();
+
+        $itemCounts = $this->transaction_detail
+            ->select('transaction_id, SUM(jumlah) as total_items')
+            ->groupBy('transaction_id')
+            ->findAll();
+
+        $itemCountMap = [];
+        foreach ($itemCounts as $count) {
+            $itemCountMap[$count['transaction_id']] = $count['total_items'];
+        }
+
+        foreach ($transactions as &$trx) {
+            $trx['jumlah_item'] = $itemCountMap[$trx['id']] ?? 0;
+        }
+
+        $data = [
+            'status' => ["code" => 200, "description" => "OK"],
+            'results' => $transactions,
+        ];
+
+
         return $this->respond($data);
     }
 

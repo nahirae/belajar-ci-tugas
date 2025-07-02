@@ -35,14 +35,31 @@ class TransaksiController extends BaseController
 
     public function cart_add()
     {
-        $this->cart->insert(array(
-            'id'        => $this->request->getPost('id'),
-            'qty'       => 1,
-            'price'     => $this->request->getPost('harga'),
-            'name'      => $this->request->getPost('nama'),
-            'options'   => array('foto' => $this->request->getPost('foto'))
-        ));
-        session()->setflashdata('success', 'Produk berhasil ditambahkan ke keranjang. (<a href="' . base_url() . 'keranjang">Lihat</a>)');
+        $id_produk = $this->request->getPost('id');
+        $produkModel = new \App\Models\ProductModel();
+        $produk = $produkModel->find($id_produk);
+        if (!$produk) {
+            session()->setFlashdata('failed', 'Produk tidak ditemukan.');
+            return redirect()->back();
+        }
+        
+        $harga_asli = $produk['harga'];
+        $diskon = session()->get('diskon_nominal') ?? 0;
+        $harga_final = max(0, $harga_asli - $diskon);
+        
+        $this->cart->insert([
+            'id'      => $produk['id'],
+            'qty'     => 1,
+            'price'   => $harga_final,
+            'name'    => $produk['nama'],
+            'options' => [
+                'foto'        => $produk['foto'],
+                'harga_asli'  => $harga_asli,
+                'diskon'      => $diskon
+            ]
+        ]);
+
+        session()->setflashdata('success', 'Produk berhasil ditambahkan ke keranjang. (<a href="' . base_url('keranjang') . '">Lihat</a>)');
         return redirect()->to(base_url('/'));
     }
 
@@ -143,6 +160,9 @@ class TransaksiController extends BaseController
     public function buy()
     {
         if ($this->request->getPost()) { 
+            $session = session();
+            $userData = $session->get('userData');
+            $diskon = $userData['diskon_nominal'] ?? 0;
             $dataForm = [
                 'username' => $this->request->getPost('username'),
                 'total_harga' => $this->request->getPost('total_harga'),
@@ -162,7 +182,7 @@ class TransaksiController extends BaseController
                     'transaction_id' => $last_insert_id,
                     'product_id' => $value['id'],
                     'jumlah' => $value['qty'],
-                    'diskon' => 0,
+                    'diskon' => $diskon,
                     'subtotal_harga' => $value['qty'] * $value['price'],
                     'created_at' => date("Y-m-d H:i:s"),
                     'updated_at' => date("Y-m-d H:i:s")
@@ -172,8 +192,9 @@ class TransaksiController extends BaseController
             }
 
             $this->cart->destroy();
-    
-            return redirect()->to(base_url());
+            session()->setFlashdata('success', 'Transaksi berhasil dibuat.');
+            return redirect()->to(base_url('profile'));
+            // return redirect()->to(base_url());
         }
     }
 }

@@ -36,6 +36,22 @@ $routes->group('keranjang', ['filter' => 'auth'], function ($routes) {
     $routes->get('clear', 'TransaksiController::cart_clear');
 });
 
+$routes->group('diskon', ['filter' => 'auth'], function ($routes) {
+    $routes->get('/', 'DiskonController::index');
+    $routes->get('create', 'DiskonController::create');
+    $routes->post('store', 'DiskonController::store');
+    $routes->get('edit/(:num)', 'DiskonController::edit/$1');
+    $routes->post('update/(:num)', 'DiskonController::update/$1');
+    $routes->get('delete/(:num)', 'DiskonController::delete/$1');
+    $routes->post('delete/(:num)', 'DiskonController::delete/$1');
+});
+
+$routes->group('pembelian', ['filter' => 'auth'], function ($routes) {
+    $routes->get('/', 'PembelianController::index');
+    $routes->get('ubah_status/(:num)', 'PembelianController::ubahStatus/$1');
+    $routes->get('detail/(:num)', 'PembelianController::detail/$1');
+});
+
 $routes->get('checkout', 'TransaksiController::checkout', ['filter' => 'auth']);
 $routes->post('buy', 'TransaksiController::buy', ['filter' => 'auth']);
 
