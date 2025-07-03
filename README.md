@@ -99,8 +99,6 @@ Sebelum menjalankan proyek, pastikan Anda sudah menginstal perangkat lunak berik
 
 ## Struktur Proyek
 
-Berikut adalah gambaran umum struktur folder dan file penting dalam proyek ini:
-
 * `app/`
     * **`Controllers/`**: Berisi semua controller yang mengatur logika aplikasi, seperti `AuthController.php`, `DiskonController.php`, `PembelianController.php`, `TransaksiController.php`, dan `ApiController.php`.
     * **`Models/`**: Berisi semua model yang berinteraksi dengan database, seperti `UserModel.php`, `DiskonModel.php`, `TransactionModel.php`, dll.
@@ -174,7 +172,7 @@ Setelah semua persiapan selesai, jalankan server lokal bawaan CodeIgniter dengan
 
 ```bash
 php spark serve
-
+```
 # CodeIgniter 4 Application Starter
 
 ## What is CodeIgniter?
