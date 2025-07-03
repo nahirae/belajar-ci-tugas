@@ -1,4 +1,4 @@
-# Proyek Aplikasi Toko (E-Commerce) - Pemrograman Web Lnajut
+# Proyek Aplikasi Toko - Pemrograman Web Lanjut
 
 Aplikasi e-commerce sederhana yang dibangun menggunakan framework **CodeIgniter 4**. Proyek ini mencakup fungsionalitas dasar toko online, mulai dari autentikasi pengguna, manajemen produk, keranjang belanja, hingga proses checkout. Aplikasi ini juga dilengkapi dengan fitur-fitur khusus seperti manajemen diskon harian, manajemen pembelian oleh admin, dan penyediaan webservice untuk dashboard eksternal.
 
